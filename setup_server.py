@@ -86,7 +86,7 @@ outdata = ssh_session.before
 ssh_session.sendline ("sudo ovs-vsctl show")
 ssh_session.expect (ssh_apis.COMMAND_PROMPT)
 outdata = ssh_session.before
-if 'ovs_version:' in outdata or 'ovs-vsctl:' in outdata:
+if 'ovs_version:' in outdata:
     print "Ovs installed on end host. Doing clean and config"
     ssh_apis.ssh_sftp(gUserInputData['server']['ip'],gUserInputData['server']['user'],gUserInputData['server']['password'], srvFilename, "/tmp/"+gServerSetupFile)
     

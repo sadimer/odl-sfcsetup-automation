@@ -28,7 +28,7 @@ install_packages()
     echo "Install maven............................................"
     #install maven
     sudo mkdir -p /usr/local/apache-maven; cd /usr/local/apache-maven
-    curl https://www.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz | sudo tar -xzv
+    curl https://downloads.apache.org/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz | sudo tar -xzv
     sudo update-alternatives --install /usr/bin/mvn mvn /usr/local/apache-maven/apache-maven-3.3.9/bin/mvn 1
     sudo yes 0 | update-alternatives --config mvn 
 

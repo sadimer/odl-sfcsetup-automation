@@ -13,8 +13,8 @@ SSH_NEWKEY = '(?i)are you sure you want to continue connecting'
 def ssh_login (host, user, password):
     global SSH_NEWKEY, COMMAND_PROMPT
     print "Login " + host
-    child = pexpect.spawn('ssh -l %s %s'%(user, host))
-    i = child.expect([pexpect.TIMEOUT, SSH_NEWKEY, COMMAND_PROMPT, '(?i)password'])
+    child = pexpect.spawn('ssh -l %s %s'%(user, host),  timeout=3000)
+    i = child.expect([pexpect.TIMEOUT, SSH_NEWKEY, COMMAND_PROMPT, '(?i)password'], timeout=3000)
     if i == 0:
         print 'ERROR! could not login with SSH. Here is what SSH said:'
         print child.before, child.after
@@ -63,10 +63,12 @@ def ssh_logout(child):
             child.expect(EOF)
 
 def ssh_sftp(host, user, passwd, src_file, dst_file):
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(host, username=user, password=passwd)
-    sftp = ssh.open_sftp()
-    sftp.put(src_file, dst_file)
-    sftp.close()
-    ssh.close()
+    #ssh = paramiko.SSHClient()
+    #ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    #ssh.connect(host, username=user, password=passwd, key_filename='/home/ubuntu/.ssh/id_rsa')
+    #sftp = ssh.open_sftp()
+    #sftp.put(src_file, dst_file)
+    #sftp.close()
+    #ssh.close()
+    os.system("scp %s %s@%s:%s" % (src_file, user, host, dst_file))
+    print("scp %s %s@%s:%s" % (src_file, user, host, dst_file))

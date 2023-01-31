@@ -1,0 +1,204 @@
+{
+        "controller": {
+                "name":"controller",
+                "user":"admin",
+                "password":"admin",
+                "ip-address": "192.168.1.183",
+                "port": "8181"
+        },
+        "service-nodes": [
+            {
+            "name":"Client",
+            "ip-address": "192.168.1.150"
+            },
+
+            {
+            "name":"Server",
+            "ip-address": "192.168.1.110"
+            },
+
+            {
+            "name":"SN-SFF",
+            "ip-address": "192.168.1.44"
+            },
+
+            {
+            "name":"SN-SF1",
+            "ip-address": "192.168.1.220"
+            },
+
+            {
+            "name":"SN-SF2",
+            "ip-address": "192.168.1.166"
+            },
+
+            {
+            "name":"SN-SF3",
+            "ip-address": "192.168.1.71"
+            }
+        ],
+
+        "service-functions": [
+            {
+            "name" : "SF1",
+            "ip-address": "192.168.1.220",
+            "type": "dpi",
+            "sff_name": "SFF1",
+            "service_node": "SN-SF1"
+            },
+
+            {
+            "name" : "SF2",
+            "ip-address": "192.168.1.166",
+            "type": "firewall",
+            "sff_name": "SFF1",
+            "service_node": "SN-SF2"
+            },
+
+            {
+            "name" : "SF3",
+            "ip-address": "192.168.1.71",
+            "type": "dpi",
+            "sff_name": "SFF1",
+            "service_node": "SN-SF3"
+            }
+        ],
+
+        "service-function-forwarders": [
+                {
+                "name": "Client-SFF",
+                "ip-address": "192.168.1.150",
+                "service_node": "Client",
+                "service_function": []
+                },
+                {
+                "name": "Server-SFF",
+                "ip-address": "192.168.1.110",
+                "service_node": "Server",
+                "service_function": []
+                },
+                {
+                "name": "SFF1",
+                "ip-address": "192.168.1.44",
+                "service_node": "SN-SFF",
+                "service_function": ["SF1", "SF2", "SF3"]
+                }
+
+            ],
+
+        "service-function-chains": [
+                {
+                "name": "SFC1",
+                "symmetric": "true",
+                "service_function": ["SF1", "SF2"]
+                },
+
+                {
+                "name": "SFC2",
+                "symmetric": "true",
+                "service_function": ["SF3"]
+                }
+        ],
+
+        "service-function-path" : "to be auto created from service-function-chains",
+        "rendered-service-path" : "to be auto created from service-function-chains and service-function-path",
+
+        "acls" : [
+            {
+            "name" : "Endpoint-http-client",
+            "type" : "ipv4-acl",
+            "aces" : [
+                    {
+                    "name": "webmail",
+                    "proto": 6,
+                    "sprange": [0, 0],
+                    "dprange": [80, 80],
+                    "siprange": "10.100.156.0/22",
+                    "diprange": "10.100.156.0/22",
+                    "action" : "SFC1",
+                    "direction": "Forward"
+                    }
+
+                ]
+            },
+            {
+            "name" : "Endpoint-http-server",
+            "type" : "ipv4-acl",
+            "aces" : [
+                    {
+                    "name": "webmail",
+                    "proto": 6,
+                    "dprange": [0, 0],
+                    "sprange": [80, 80],
+                    "siprange": "10.100.156.0/22",
+                    "diprange": "10.100.156.0/22",
+                    "action" : "SFC1",
+                    "direction": "Reverse"
+                    }
+
+                ]
+            },
+            {
+            "name" : "Endpoint-ssh-client",
+            "type" : "ipv4-acl",
+            "aces" : [
+                    {
+                    "name": "ssh",
+                    "proto": 6,
+                    "sprange": [0, 0],
+                    "dprange": [22, 22],
+                    "siprange": "10.100.156.0/22",
+                    "diprange": "10.100.156.0/22",
+                    "action" : "SFC2",
+                    "direction": "Forward"
+                    }
+
+                ]
+            },
+            {
+            "name" : "Endpoint-ssh-server",
+            "type" : "ipv4-acl",
+            "aces" : [
+                    {
+                    "name": "ssh",
+                    "proto": 6,
+                    "sprange": [22, 22],
+                    "dprange": [0, 0],
+                    "siprange": "10.100.156.0/22",
+                    "diprange": "10.100.156.0/22",
+                    "action" : "SFC2",
+                    "direction": "Reverse"
+                    }
+
+                ]
+            }
+        ],
+
+        "service-function-classifiers": [
+            {
+            "name": "scl1",
+            "sff": "Server-SFF",
+            "interface": "veth-br",
+            "acl":"Endpoint-http-server"
+            },
+            {
+            "name": "scl2",
+            "sff": "Server-SFF",
+            "interface": "veth-br",
+            "acl":"Endpoint-ssh-server"
+            },
+            {
+            "name": "scl3",
+            "sff": "Client-SFF",
+            "interface": "veth-br",
+            "acl":"Endpoint-http-client"
+            },
+            {
+            "name": "scl4",
+            "sff": "Client-SFF",
+            "interface": "veth-br",
+            "acl":"Endpoint-ssh-client"
+            }
+        ]
+}
+

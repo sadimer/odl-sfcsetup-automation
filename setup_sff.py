@@ -92,7 +92,7 @@ for node in gUserInputData['SFF']:
     i = ssh_session.expect (ssh_apis.COMMAND_PROMPT)
     outdata = ssh_session.before
 
-    if 'ovs_version:' in outdata or 'ovs-vsctl:' in outdata:
+    if 'ovs_version:' in outdata:
         print "Ovs installed on end host. Doing clean and config"
         ssh_apis.ssh_sftp(node['ip'],node['user'],node['password'], sffFilename, "/tmp/"+gSffSetupFile)
     

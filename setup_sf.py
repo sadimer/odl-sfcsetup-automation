@@ -64,11 +64,11 @@ if not os.path.exists(sfcFilename):
     exit(0)
 
 for node in gUserInputData['SF']:
-    #print "Login to " + node['ip'] 
+    print "Login to " + node['ip'] 
     ssh_session = ssh_apis.ssh_login(node['ip'],node['user'],node['password'])
 
     print "starting installation of required packages.."
-    ssh_session.sendline ("sudo apt-get install -y python-pip")
+    ssh_session.sendline ("sudo apt-get update; sudo apt-get install -y libnfnetlink-dev libnetfilter-queue-dev; sudo apt-get install -y python3-pip; sudo python3 -m pip install --upgrade pip; sudo pip3 install setuptools-rust")
     i = ssh_session.expect (ssh_apis.COMMAND_PROMPT)
     outdata = ssh_session.before
     ssh_session.sendline ("sudo apt-get install -y git")
@@ -80,26 +80,28 @@ for node in gUserInputData['SF']:
     i = ssh_session.expect (ssh_apis.COMMAND_PROMPT)
     outdata = ssh_session.before
 
-    #print "starting uninstall.."
+    print "starting uninstall.."
     ssh_session.sendline ("sudo pip3 uninstall sfc -y")
     i = ssh_session.expect (ssh_apis.COMMAND_PROMPT)
     outdata = ssh_session.before
 
-    #print "copying file.."    
+    print "copying file.."    
     ssh_apis.ssh_sftp(node['ip'],node['user'],node['password'], sfcFilename, "/tmp/"+gSfcSetupFile)
 
-    #print "starting install"
-    #print "cd /tmp/; sudo pip3 install " + gSfcSetupFile
-    ssh_session.sendline ("cd /tmp/; sudo pip3 install " + gSfcSetupFile )
+    print "starting install"
+    print "cd /tmp/; sudo pip3 install " + gSfcSetupFile
+    ssh_session.sendline ("cd /tmp/; sudo pip3 install pyopenssl --upgrade; sudo pip3 install " + gSfcSetupFile )
     i = ssh_session.expect (ssh_apis.COMMAND_PROMPT)
     outdata = ssh_session.before
 
-    ssh_session.sendline ("cd /usr/local/lib/python3.4/dist-packages/sfc")
+    ssh_session.sendline ("cd /usr/local/lib/python3.6/dist-packages/sfc")
+    print "cd /usr/local/lib/python3.6/dist-packages/sfc"
     i = ssh_session.expect (ssh_apis.COMMAND_PROMPT)
     outdata = ssh_session.before
 
-    ssh_session.sendline ("sudo python3.4 ./sfc_agent.py --rest --odl-ip-port " + gUserInputData['controller']['ip'] + ":8181 &")
+    ssh_session.sendline ("sudo python3.6 ./sfc_agent.py --rest --odl-ip-port " + gUserInputData['controller']['ip'] + ":8181 &")
     i = ssh_session.expect (ssh_apis.COMMAND_PROMPT)
+    print "sudo python3 ./sfc_agent.py --rest --odl-ip-port " + gUserInputData['controller']['ip'] + ":8181 &"
     outdata = ssh_session.before
 
     ssh_apis.ssh_logout(ssh_session)

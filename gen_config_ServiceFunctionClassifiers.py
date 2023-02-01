@@ -35,7 +35,7 @@ config_data      = {
                 ], 
                 "acl": {
                     "type": "ietf-access-control-list:ipv4-acl", 
-                    "name": "Endpoint-ssh-server"
+                    "name": "Endpoint-http2-server"
                 }
             }, 
             {
@@ -61,7 +61,7 @@ config_data      = {
                 ], 
                 "acl": {
                     "type": "ietf-access-control-list:ipv4-acl", 
-                    "name": "Endpoint-ssh-client"
+                    "name": "Endpoint-http2-client"
                 }
             }
         ]

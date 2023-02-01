@@ -18,8 +18,8 @@ if [ ! -f "$1" ]; then
     exit
 fi
 
-python setup_odl.py "$1"
-python setup_sf.py "$1"
+#python setup_odl.py "$1"
+#python setup_sf.py "$1"
 python setup_sff.py "$1"
 python setup_server.py "$1"
 python setup_client.py  "$1"

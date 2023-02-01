@@ -96,7 +96,7 @@
                 {
                 "name": "SFC2",
                 "symmetric": "true",
-                "service_function": ["SF3"]
+                "service_function": ["SF1", "SF3"]
                 }
         ],
 
@@ -146,7 +146,7 @@
                     "name": "ssh",
                     "proto": 6,
                     "sprange": [0, 0],
-                    "dprange": [22, 22],
+                    "dprange": [8080, 8080],
                     "siprange": "10.100.156.0/22",
                     "diprange": "10.100.156.0/22",
                     "action" : "SFC2",
@@ -162,7 +162,7 @@
                     {
                     "name": "ssh",
                     "proto": 6,
-                    "sprange": [22, 22],
+                    "sprange": [8080, 8080],
                     "dprange": [0, 0],
                     "siprange": "10.100.156.0/22",
                     "diprange": "10.100.156.0/22",
@@ -185,7 +185,7 @@
             "name": "scl2",
             "sff": "Server-SFF",
             "interface": "veth-br",
-            "acl":"Endpoint-ssh-server"
+            "acl":"Endpoint-http2-server"
             },
             {
             "name": "scl3",
@@ -197,7 +197,7 @@
             "name": "scl4",
             "sff": "Client-SFF",
             "interface": "veth-br",
-            "acl":"Endpoint-ssh-client"
+            "acl":"Endpoint-http2-client"
             }
         ]
 }

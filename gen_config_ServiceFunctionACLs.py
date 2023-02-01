@@ -75,8 +75,8 @@ config_data      = {
                             "matches": {
                                 "destination-ipv4-network": "10.100.156.0/22", 
                                 "destination-port-range": {
-                                    "lower-port": 22, 
-                                    "upper-port": 22
+                                    "lower-port": 8080, 
+                                    "upper-port": 8080
                                 }, 
                                 "source-ipv4-network": "10.100.156.0/22", 
                                 "protocol": 6, 
@@ -108,8 +108,8 @@ config_data      = {
                                 "source-ipv4-network": "10.100.156.0/22", 
                                 "protocol": 6, 
                                 "source-port-range": {
-                                    "lower-port": 22, 
-                                    "upper-port": 22
+                                    "lower-port": 8080, 
+                                    "upper-port": 8080
                                 }
                             }, 
                             "actions": {

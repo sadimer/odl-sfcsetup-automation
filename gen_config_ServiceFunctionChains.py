@@ -32,6 +32,10 @@ config_data      = {
                 "sfc-service-function": [
                     {
                         "type": "dpi", 
+                        "name": "SF1"
+                    }, 
+                    {
+                        "type": "dpi", 
                         "name": "SF3"
                     }
                 ]
